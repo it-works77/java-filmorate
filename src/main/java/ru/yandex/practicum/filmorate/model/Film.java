@@ -1,16 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import ru.yandex.practicum.filmorate.annotation.NotBefore;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 /**

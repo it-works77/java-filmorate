@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -15,14 +14,10 @@ class FilmTest {
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void createFilm_whenCorrectParams_getOk() {
         assertDoesNotThrow(() -> {
-                    Film film = Film.builder()
+                    Film.builder()
                             .id(1)
                             .name("asdf")
                             .description("ASDF")
