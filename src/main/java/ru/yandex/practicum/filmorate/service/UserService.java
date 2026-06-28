@@ -34,6 +34,11 @@ public class UserService {
                     .formatted(user.getLogin()));
         }
 
+        // ТЗ: имя для отображения может быть пустым — в таком случае будет использован логин
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+
         int id = getId();
         User newUser = User.builder()
                 .id(id)
