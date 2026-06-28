@@ -11,6 +11,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FilmTest {
+    private static final int MIN_FILM_YEAR = 1895;
+    private static final int MIN_FILM_MONTH = 12;
+    private static final int MIN_FILM_DAY = 28;
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -46,12 +49,11 @@ class FilmTest {
 
     @Test
     void createFilm_whenDateIsAfterMinDate_getOk() {
-        // Не работает, надо проверять через Validator
         Film film = Film.builder()
                 .id(1)
                 .name("asdf")
                 .description("ASDF")
-                .releaseDate(LocalDate.of(1875, 12, 29))
+                .releaseDate(LocalDate.of(MIN_FILM_YEAR, MIN_FILM_MONTH, MIN_FILM_DAY + 1))
                 .duration(1)
                 .build();
 
@@ -61,12 +63,11 @@ class FilmTest {
 
     @Test
     void createFilm_whenDateIsEqualMinDate_getOk() {
-        // Не работает, надо проверять через Validator
         Film film = Film.builder()
                 .id(1)
                 .name("asdf")
                 .description("ASDF")
-                .releaseDate(LocalDate.of(1875, 12, 28))
+                .releaseDate(LocalDate.of(MIN_FILM_YEAR, MIN_FILM_MONTH, MIN_FILM_DAY))
                 .duration(1)
                 .build();
 
@@ -80,7 +81,7 @@ class FilmTest {
                 .id(1)
                 .name("asdf")
                 .description("ASDF")
-                .releaseDate(LocalDate.of(1875, 12, 27))
+                .releaseDate(LocalDate.of(MIN_FILM_YEAR, MIN_FILM_MONTH, MIN_FILM_DAY - 1))
                 .duration(1)
                 .build();
 
@@ -90,7 +91,7 @@ class FilmTest {
 
         ConstraintViolation<Film> violation = violations.iterator().next();
         assertEquals("releaseDate", violation.getPropertyPath().toString());
-        assertEquals("Дата релиза не может быть раньше 28.12.1875", violation.getMessage());
+        assertEquals("Дата релиза не может быть раньше 28.12.1895", violation.getMessage());
     }
 
     @Test
