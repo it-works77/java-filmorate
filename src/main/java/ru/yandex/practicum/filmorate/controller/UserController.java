@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -19,27 +21,26 @@ public class UserController {
      * создание пользователя;
      * */
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User create(@Valid @RequestBody User user) {
         // TODO
         /* Добавьте логирование для операций, которые изменяют сущности — добавляют и обновляют их.
         * Также логируйте причины ошибок — например, если валидация не пройдена.
         * */
-        log.info("Create user {}", user);
-        return user;
+        log.info("Create user: {}", user);
+        User result = userService.add(user);
+        log.info("User created: {}", result);
+        return result;
     }
 
     /*
      * обновление пользователя;
      * */
     @PutMapping
-    public User update(@RequestBody User newUser) {
-        // TODO
-        /* Добавьте логирование для операций, которые изменяют сущности — добавляют и обновляют их.
-         * Также логируйте причины ошибок — например, если валидация не пройдена.
-         * */
-        log.info("Update user {}", newUser);
-
-        return newUser;
+    public User update(@Valid @RequestBody User newUser) {
+        log.info("Update user: {}", newUser);
+        User result = userService.update(newUser);
+        log.info("User updated: {}", newUser);
+        return result;
     }
 
     /*

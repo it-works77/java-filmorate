@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -18,7 +17,6 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ValidationErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
@@ -34,7 +32,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleWrongRequestBody(HttpMessageNotReadableException ex) {
         ErrorResponse body = ErrorResponse.builder()
                 .message("Ошибка парсинга тела запроса")
@@ -45,8 +42,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleWrongRequestBody(IllegalArgumentException ex) {
+        ErrorResponse body = ErrorResponse.builder()
+                .message("Неверное значение параметра")
+                .details(ex.getMessage())
+                .build();
+        log.warn("Неверное значение параметра: {}", ex.getMessage());
+        log.debug("Неверное значение параметра", ex);
+        return ResponseEntity.badRequest().body(body);
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleAllErrors(NoResourceFoundException ex) {
         ErrorResponse body = ErrorResponse.builder()
                 .message("Ресурс не найден")
@@ -55,12 +62,21 @@ public class GlobalExceptionHandler {
         log.warn("Ресурс не найден: {}", ex.getMessage());
         log.info("Ресурс не найден. Метод: {}. Путь: {}", ex.getHttpMethod(), ex.getResourcePath());
         log.debug("Ресурс не найден", ex);
-        return ResponseEntity.internalServerError().body(body);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEntityAlreadyExists(Exception ex) {
+        ErrorResponse body = ErrorResponse.builder()
+                .message("Объект уже существует")
+                .details(ex.getMessage())
+                .build();
+        log.error("Объект уже существует: {}", ex.getMessage());
+        log.debug("Объект уже существует", ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleAllErrors(Exception ex) {
         ErrorResponse body = ErrorResponse.builder()
                 .message("Внутренняя ошибка сервера")

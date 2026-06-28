@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -19,9 +20,9 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class Film {
-    private final LocalDate FIRST_FILM_DATE = LocalDate.of(1875, 12, 28);
     @Positive
-    private int id; // целочисленный идентификатор
+    @EqualsAndHashCode.Exclude
+    private Integer id; // целочисленный идентификатор
 
     @NotBlank(message = "Название фильма не может быть пустым")
     private String name; // название

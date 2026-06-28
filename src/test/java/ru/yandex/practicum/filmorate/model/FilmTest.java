@@ -97,4 +97,24 @@ class FilmTest {
         assertEquals("releaseDate", violation.getPropertyPath().toString());
         assertEquals("Дата релиза не может быть раньше 28.12.1875", violation.getMessage());
     }
+
+    @Test
+    void checkEquals_whenEqualExcludingId_getEqual() {
+        Film film1 = Film.builder()
+                .id(1)
+                .name("asdf")
+                .description("ASDF")
+                .releaseDate(LocalDate.now())
+                .duration(1)
+                .build();
+
+        Film film2 = Film.builder()
+                .id(2)
+                .name("asdf")
+                .description("ASDF")
+                .releaseDate(LocalDate.now())
+                .duration(1)
+                .build();
+        assertEquals(film1, film2);
+    }
 }

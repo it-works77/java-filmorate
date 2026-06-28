@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.time.LocalDate;
@@ -11,7 +13,8 @@ import java.time.LocalDate;
 @Builder
 public class User {
     @Positive
-    private int id; // целочисленный идентификатор
+    @EqualsAndHashCode.Exclude
+    private Integer id; // целочисленный идентификатор
 
     @NotBlank(message = "логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не должен содержать пробелы")
@@ -22,8 +25,8 @@ public class User {
     private String email; // электронная почта
 
     // имя для отображения может быть пустым — в таком случае будет использован логин;
-    @NonNull
-    private String name; // имя для отображения
+    @Builder.Default
+    private String name = ""; // имя для отображения
 
     @Past(message = "дата рождения не может быть в будущем")
     private LocalDate birthday; // дата рождения
