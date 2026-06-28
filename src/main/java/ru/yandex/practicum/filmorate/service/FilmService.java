@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityAlreadyExistsException;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
@@ -52,6 +53,13 @@ public class FilmService {
             throw new IllegalArgumentException("При обновлении фильма не задан его id");
         }
 
+        if (!films.containsKey(newFilm.getId())) {
+            log.warn("Не удалось обновить фильм. Нет фильма с id={}", newFilm.getId());
+            throw new EntityNotFoundException("Не удалось обновить фильм. Нет фильма с id=%d"
+                    .formatted(newFilm.getId()));
+        }
+
+        // Проверим, есть ли такой объект без учета id
         Optional<Film> oldFilm = getFilm(newFilm);
         if (oldFilm.isPresent()) {
             if (oldFilm.get().getId()
@@ -66,14 +74,10 @@ public class FilmService {
             }
         }
 
-        if (films.containsKey(newFilm.getId())) {
-            films.put(newFilm.getId(), newFilm);
-            log.debug("Обновили фильм {}", newFilm);
-            return newFilm;
-        } else {
-            log.warn("Не удалось обновить фильм. Нет такого id={}", newFilm.getId());
-            throw new IllegalArgumentException("Нет фильма с id=%d".formatted(newFilm.getId()));
-        }
+        films.put(newFilm.getId(), newFilm);
+        log.debug("Обновили фильм {}", newFilm);
+        return newFilm;
+
     }
 
     private Optional<Film> getFilm(Film film) {

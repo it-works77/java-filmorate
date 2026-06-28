@@ -65,6 +65,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAllErrors(EntityNotFoundException ex) {
+        ErrorResponse body = ErrorResponse.builder()
+                .message("Объект не найден")
+                .details(ex.getMessage())
+                .build();
+        log.warn("Объект не найден: {}", ex.getMessage());
+        log.debug("Объект не найден", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEntityAlreadyExists(Exception ex) {
         ErrorResponse body = ErrorResponse.builder()

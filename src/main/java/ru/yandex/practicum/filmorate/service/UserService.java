@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.EntityAlreadyExistsException;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class UserService {
         }
 
         // ТЗ: имя для отображения может быть пустым — в таком случае будет использован логин
-        String userName = user.getName() == null? user.getLogin() : user.getName();
+        String userName = user.getName() == null ? user.getLogin() : user.getName();
 
         int id = getId();
         User newUser = User.builder()
@@ -56,6 +57,13 @@ public class UserService {
             throw new IllegalArgumentException("При обновлении пользователя не задан его id");
         }
 
+        if (!users.containsKey(newUser.getId())) {
+            log.warn("Не удалось обновить пользователя. Нет такого id={}", newUser.getId());
+            throw new EntityNotFoundException("Не удалось обновить пользователя. Нет такого id=%d"
+                    .formatted(newUser.getId()));
+        }
+
+        // Проверим, есть ли такой объект без учета id
         // TODO Для пользователей избыточно проверять по всем полям, достаточно логина.
         Optional<User> oldUser = getUser(newUser);
         if (oldUser.isPresent()) {
@@ -71,14 +79,9 @@ public class UserService {
             }
         }
 
-        if (users.containsKey(newUser.getId())) {
-            users.put(newUser.getId(), newUser);
-            log.debug("Обновили пользователя {}", newUser);
-            return newUser;
-        } else {
-            log.warn("Не удалось обновить пользователя. Нет такого id={}", newUser.getId());
-            throw new IllegalArgumentException("Нет пользователя с id=%d".formatted(newUser.getId()));
-        }
+        users.put(newUser.getId(), newUser);
+        log.debug("Обновили пользователя {}", newUser);
+        return newUser;
     }
 
     private Optional<User> getUser(User user) {

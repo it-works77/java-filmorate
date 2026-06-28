@@ -26,7 +26,7 @@ public class Film {
     @NonNull
     private String description; // описание
 
-    @NotBefore(value = "1875-12-28", message = "Дата релиза не может быть раньше 28.12.1875")
+    @NotBefore(value = "1895-12-28", message = "Дата релиза не может быть раньше 28.12.1895")
     @NonNull
     private LocalDate releaseDate; // дата релиза
 
