@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,7 +31,18 @@ public class GlobalExceptionHandler {
         log.warn("Ошибка валидации: {}", errors);
         log.debug("Ошибка валидации", ex);
         return ResponseEntity.badRequest().body(body);
+    }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleWrongRequestBody(HttpMessageNotReadableException ex) {
+        ErrorResponse body = ErrorResponse.builder()
+                .message("Ошибка парсинга тела запроса")
+                .details(ex.getMessage())
+                .build();
+        log.warn("Ошибка парсинга тела запроса: {}", ex.getMessage());
+        log.debug("Ошибка парсинга тела запроса", ex);
+        return ResponseEntity.badRequest().body(body);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
