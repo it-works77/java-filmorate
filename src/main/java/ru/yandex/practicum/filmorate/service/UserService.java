@@ -35,16 +35,14 @@ public class UserService {
         }
 
         // ТЗ: имя для отображения может быть пустым — в таком случае будет использован логин
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-        }
+        String userName = user.getName() == null? user.getLogin() : user.getName();
 
         int id = getId();
         User newUser = User.builder()
                 .id(id)
                 .login(user.getLogin())
                 .email(user.getEmail())
-                .name(user.getName())
+                .name(userName)
                 .birthday(user.getBirthday())
                 .build();
 
