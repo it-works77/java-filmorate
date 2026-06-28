@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +28,24 @@ public class GlobalExceptionHandler {
                 .errors(errors)
                 .build();
         log.warn("Ошибка валидации: {}", errors);
+        log.debug("Ошибка валидации", ex);
         return ResponseEntity.badRequest().body(body);
 
     }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleAllErrors(NoResourceFoundException ex) {
+        ErrorResponse body = ErrorResponse.builder()
+                .message("Ресурс не найден")
+                .details(ex.getMessage())
+                .build();
+        log.warn("Ресурс не найден: {}", ex.getMessage());
+        log.info("Ресурс не найден. Метод: {}. Путь: {}", ex.getHttpMethod(), ex.getResourcePath());
+        log.debug("Ресурс не найден", ex);
+        return ResponseEntity.internalServerError().body(body);
+    }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -39,6 +55,7 @@ public class GlobalExceptionHandler {
                 .details(ex.getMessage())
                 .build();
         log.error("Внутренняя ошибка сервера: {}", ex.getMessage());
+        log.debug("Внутренняя ошибка сервера:", ex);
         return ResponseEntity.internalServerError().body(body);
     }
 }
