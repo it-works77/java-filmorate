@@ -13,6 +13,13 @@ import java.util.Map;
 public class UserService {
     private final Map<Integer, User> users = new HashMap<>();
 
+    /*
+     * - электронная почта не может быть пустой и должна содержать символ @;
+     * - логин не может быть пустым и содержать пробелы;
+     * - имя для отображения может быть пустым — в таком случае будет использован логин;
+     * - дата рождения не может быть в будущем.
+     */
+
     public Collection<User> getAll() {
         return users.values();
     }
