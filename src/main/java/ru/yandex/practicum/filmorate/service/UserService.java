@@ -10,11 +10,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class UserService {
     private final Map<Integer, User> users = new HashMap<>();
+    private int currentId = 1; // Максимальный занятый идентификатор. Освободившиеся не занимаем
 
     /*
      * - электронная почта не может быть пустой и должна содержать символ @;
@@ -24,7 +26,9 @@ public class UserService {
      */
 
     public Collection<User> getAll() {
-        return users.values();
+        return users.values().stream()
+                .map(User::of)
+                .collect(Collectors.toList());
     }
 
     public User add(User user) {
@@ -91,8 +95,6 @@ public class UserService {
     }
 
     private Integer getId() {
-        Optional<Integer> currentMaxId = users.keySet().stream()
-                .max(Integer::compareTo);
-        return currentMaxId.map(id -> id + 1).orElse(1);
+        return currentId++;
     }
 }

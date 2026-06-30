@@ -4,6 +4,8 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.validation.Create;
+import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -33,7 +35,6 @@ class FilmTest {
 
     @Test
     void createFilm_whenNameIsBlank_getValidationException() {
-        // Не работает, надо проверять через Validator
         Film film = Film.builder()
                 .id(1)
                 .name("")
@@ -42,9 +43,13 @@ class FilmTest {
                 .duration(1)
                 .build();
 
-        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertFalse(violations.isEmpty());
         assertEquals(1, violations.size());
+
+        violations = validator.validate(film, Create.class);
+        assertFalse(violations.isEmpty());
+        assertEquals(2, violations.size());
     }
 
     @Test
@@ -57,7 +62,7 @@ class FilmTest {
                 .duration(1)
                 .build();
 
-        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertTrue(violations.isEmpty());
     }
 
@@ -71,7 +76,7 @@ class FilmTest {
                 .duration(1)
                 .build();
 
-        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertTrue(violations.isEmpty());
     }
 
@@ -85,7 +90,7 @@ class FilmTest {
                 .duration(1)
                 .build();
 
-        Set<ConstraintViolation<Film>> violations = validator.validate(film);
+        Set<ConstraintViolation<Film>> violations = validator.validate(film, Update.class);
         assertFalse(violations.isEmpty());
         assertEquals(1, violations.size());
 

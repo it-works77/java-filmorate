@@ -10,11 +10,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class FilmService {
     private final Map<Integer, Film> films = new HashMap<>();
+    private int currentId = 1; // Максимальный занятый идентификатор. Освободившиеся не занимаем
 
     /*
      * - название не может быть пустым;
@@ -24,7 +26,9 @@ public class FilmService {
      */
 
     public Collection<Film> getAll() {
-        return films.values();
+        return films.values().stream()
+                .map(Film::of)
+                .collect(Collectors.toList());
     }
 
     public Film add(Film film) {
@@ -87,9 +91,6 @@ public class FilmService {
     }
 
     private Integer getId() {
-        Optional<Integer> currentMaxId = films.keySet().stream()
-                .max(Integer::compareTo);
-
-        return currentMaxId.map(id -> id + 1).orElse(1);
+        return currentId++;
     }
 }
