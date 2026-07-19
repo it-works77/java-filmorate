@@ -42,7 +42,7 @@ public class UserService {
         // ТЗ: имя для отображения может быть пустым — в таком случае будет использован логин
         String userName = user.getName() == null ? user.getLogin() : user.getName();
 
-        int id = getId();
+        int id = getNextId();
         User newUser = User.builder()
                 .id(id)
                 .login(user.getLogin())
@@ -94,7 +94,7 @@ public class UserService {
                 .findFirst();
     }
 
-    private Integer getId() {
+    private Integer getNextId() {
         return currentId++;
     }
 }

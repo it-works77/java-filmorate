@@ -38,7 +38,7 @@ public class FilmService {
             throw new EntityAlreadyExistsException("Фильм %s уже существует".formatted(film.getName()));
         }
 
-        int id = getId();
+        int id = getNextId();
         Film newFilm = Film.builder()
                 .id(id)
                 .name(film.getName())
@@ -90,7 +90,7 @@ public class FilmService {
                 .findFirst();
     }
 
-    private Integer getId() {
+    private Integer getNextId() {
         return currentId++;
     }
 }
