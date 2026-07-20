@@ -1,0 +1,8 @@
+spring:
+  main:
+    log-startup-info: true
+
+logging.level:
+  root: INFO
+  ru.yandex.practicum.filmorate: DEBUG
+  org.zalando.logbook: TRACE
