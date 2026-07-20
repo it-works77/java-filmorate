@@ -28,7 +28,6 @@ public class InMemoryLikeStorage implements LikeStorage {
     public void removeLike(Integer filmId, Integer userId) {
         log.debug("removeLike for film {}", filmId);
 
-
         if (filmLikes.containsKey(filmId)) {
             Set<Integer> likes = filmLikes.get(filmId);
             if (likes.contains(userId)) {
@@ -51,8 +50,9 @@ public class InMemoryLikeStorage implements LikeStorage {
         if (filmLikes.containsKey(filmId)) {
             return filmLikes.get(filmId).stream().toList();
         } else {
-            log.warn("No such film in filmLikes {}", filmId);
-            throw new NoSuchElementException("No such film in filmLikes %d".formatted(filmId));
+            String msg = "No such film id=%d in filmLikes".formatted(filmId);
+            log.info(msg);
+            return List.of();
         }
     }
 

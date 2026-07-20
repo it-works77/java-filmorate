@@ -50,8 +50,8 @@ class InMemoryLikeStorageTest {
     }
 
     @Test
-    void getLike_whenWrongFilmId_getThrowNoSuchElement() {
+    void getLike_whenWrongFilmId_getEmptyList() {
         inMemoryLikeStorage.addLike(1, 1);
-        assertThrows(NoSuchElementException.class, () -> inMemoryLikeStorage.getFilmLikes(2));
+        assertEquals(0, inMemoryLikeStorage.getFilmLikes(2).size());
     }
 }

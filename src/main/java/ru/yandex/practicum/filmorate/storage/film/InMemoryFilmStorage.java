@@ -110,8 +110,8 @@ public class InMemoryFilmStorage implements FilmStorage {
         return currentId++;
     }
 
-    private class UniqueConstraint {
-        Map<String, Integer> constraints = new HashMap<>();
+    private static class UniqueConstraint {
+        final Map<String, Integer> constraints = new HashMap<>();
 
         void add(Film film) {
             constraints.put(getConstraintKey(film), film.getId());

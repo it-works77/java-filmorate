@@ -32,8 +32,6 @@ public class InMemoryUserStorage implements UserStorage {
                 .id(id)
                 .login(user.getLogin())
                 .email(user.getEmail())
-                // TODO Проверить, что в сервисе UserService соблюдаем требование ТЗ:
-                // имя для отображения может быть пустым — в таком случае будет использован логин
                 .name(user.getName())
                 .birthday(user.getBirthday())
                 .build();
@@ -110,8 +108,8 @@ public class InMemoryUserStorage implements UserStorage {
         return currentId++;
     }
 
-    private class UniqueConstraint {
-        Map<String, Integer> constraints = new HashMap<>();
+    private static class UniqueConstraint {
+        final Map<String, Integer> constraints = new HashMap<>();
 
         void add(User user) {
             constraints.put(getConstraintKey(user), user.getId());
