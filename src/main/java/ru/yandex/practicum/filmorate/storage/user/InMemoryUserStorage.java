@@ -39,7 +39,7 @@ public class InMemoryUserStorage implements UserStorage {
                 .build();
 
         users.put(id, newUser);
-        userStorageUniqueConstraint.add(user);
+        userStorageUniqueConstraint.add(newUser);
         return newUser;
     }
 
