@@ -33,26 +33,34 @@ public class InMemoryFriendStorage implements FriendStorage {
     public void removeFriend(Integer userId, Integer friendId) {
         log.debug("removeFriend id={} from user id={}", friendId, userId);
 
-        removeFriendFromUser(userId, friendId);
-        removeFriendFromUser(friendId, userId);
-
+        boolean firstLinkRemoveResult = removeFriendFromUser(userId, friendId);
+        boolean secondLinkRemoveResult = removeFriendFromUser(friendId, userId);
+        if (firstLinkRemoveResult && secondLinkRemoveResult) {
+            log.debug("Both friend links was removed");
+        } else if (!firstLinkRemoveResult && !secondLinkRemoveResult) {
+            log.debug("No friend links was removed");
+        } else {
+            log.error("Only one friend link was removed for user id={} and id={}", friendId, userId);
+        }
     }
 
-    private void removeFriendFromUser(Integer userId, Integer friendId) {
+    private boolean removeFriendFromUser(Integer userId, Integer friendId) {
         if (friends.containsKey(userId)) {
             Set<Integer> userFriends = friends.get(userId);
             if (userFriends.contains(friendId)) {
                 userFriends.remove(friendId);
                 log.debug("Friend id={} removed from user id={}. New friends: {}", friendId, userId, userFriends);
+                return true;
             } else {
                 String msg = "No friend id=%d of user id=%d in friends: %s".formatted(friendId, userId, friends);
                 log.warn(msg);
-                throw new NoSuchElementException(msg);
+                return false;
             }
         } else {
             String msg = "No such user id=%d in friends storage".formatted(userId);
             log.warn(msg);
-            throw new NoSuchElementException(msg);
+            return false;
+
         }
     }
 

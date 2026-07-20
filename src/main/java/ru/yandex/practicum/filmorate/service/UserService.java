@@ -68,6 +68,17 @@ public class UserService {
                 .toList();
     }
 
+    public Collection<User> getFriends(@Positive Integer userId) {
+        checkUserExistence(userId);
+        List<Integer> friendIds = friendStorage.getFriends(userId);
+        return friendIds.stream()
+                .map(userStorage::get)
+                .map(userOpt -> userOpt.orElseThrow(() ->
+                        new IllegalStateException("Неконсистентное состояние friendStorage" +
+                                " и userStorage: не найден пользователь по Id")))
+                .toList();
+    }
+
     public Collection<Integer> getCommonFriendIds(Integer firstUserId, Integer secondUserId) {
         checkUserExistence(firstUserId);
         checkUserExistence(secondUserId);
@@ -88,4 +99,5 @@ public class UserService {
             throw new EntityNotFoundException(msg);
         }
     }
+
 }

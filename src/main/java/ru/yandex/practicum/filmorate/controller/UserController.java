@@ -48,6 +48,16 @@ public class UserController {
     }
 
     /*
+     * получение пользователя по id
+     */
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable @Positive Integer id) {
+        log.info("Получаем пользователя по id={}", id);
+        return userService.get(id).orElseThrow(() ->
+                new EntityNotFoundException("Не найден пользователь с id=" + id));
+    }
+
+    /*
      * получение списка всех пользователей.
      */
     @GetMapping
@@ -61,10 +71,19 @@ public class UserController {
      * */
     @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addLike(@PathVariable @Positive Integer id,
+    public void addFriend(@PathVariable @Positive Integer id,
                         @PathVariable @Positive Integer friendId) {
         log.info("Пользователь c id={} добавляет в друзья id={}", id, friendId);
         userService.addFriend(id, friendId);
+    }
+
+    /*
+     * возвращаем список пользователей, являющихся его друзьями
+     * */
+    @GetMapping("/{id}/friends")
+    public Collection<User> getFriends(@PathVariable @Positive Integer id) {
+        log.info("Получаем друзей пользователя id={}", id);
+        return userService.getFriends(id);
     }
 
     /*
@@ -72,20 +91,10 @@ public class UserController {
      * */
     @DeleteMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeLike(@PathVariable @Positive Integer id,
+    public void removeFriend(@PathVariable @Positive Integer id,
                            @PathVariable @Positive Integer friendId) {
         log.info("Пользователь c id={} удаляет из друзей id={}", id, friendId);
         userService.removeFriend(id, friendId);
-    }
-
-    /*
-     * получение пользователя по id
-     */
-    @GetMapping("/{id}")
-    public User getFilm(@PathVariable @Positive Integer id) {
-        log.info("Получаем пользователя по id={}", id);
-        return userService.get(id).orElseThrow(() ->
-                new EntityNotFoundException("Не найден пользователь с id=" + id));
     }
 
     /*
