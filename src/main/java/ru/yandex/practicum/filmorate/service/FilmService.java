@@ -55,6 +55,9 @@ public class FilmService {
     }
 
     public Collection<Film> getTopFilmsByLikes(Integer topFilmsNumber) {
+        if (topFilmsNumber < 1) {
+            throw new IllegalArgumentException("Количество популярных фильмов в запросе должно быть больше нуля");
+        }
 
         Map<Integer, HashSet<Integer>> likes = likeStorage.getAllLikes();
         List<Integer> filmIds = likes.entrySet().stream()
