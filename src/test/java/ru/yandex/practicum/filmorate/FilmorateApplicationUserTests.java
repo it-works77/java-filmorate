@@ -122,7 +122,7 @@ class FilmorateApplicationUserTests {
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "  \"login\": \"updateDuplicated1\"," +
+                        "  \"login\": \"updateOwn1\"," +
                         "  \"name\": \"Nick Name\"," +
                         "  \"email\": \"mail@mail.ru\"," +
                         "  \"birthday\": \"1946-08-20\"" +
@@ -132,7 +132,7 @@ class FilmorateApplicationUserTests {
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "  \"login\": \"updateDuplicated2\"," +
+                        "  \"login\": \"updateOwn2\"," +
                         "  \"name\": \"Nick Name\"," +
                         "  \"email\": \"mail@mail.ru\"," +
                         "  \"birthday\": \"1946-08-20\"" +
@@ -142,8 +142,9 @@ class FilmorateApplicationUserTests {
         mockMvc.perform(put("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
-                        "  \"id\": 1," +
-                        "  \"login\": \"updateDuplicated1\"," +
+                        // TODO test depends on id, fix it
+                        "  \"id\": 7," +
+                        "  \"login\": \"updateOwn1\"," +
                         "  \"name\": \"Nick Name\"," +
                         "  \"email\": \"mail@mail.ru\"," +
                         "  \"birthday\": \"1946-08-20\"" +
