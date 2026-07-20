@@ -7,8 +7,6 @@ import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Film.
@@ -17,6 +15,12 @@ import java.util.Set;
 @Data
 @Builder
 public class Film {
+    /*
+     * - название не может быть пустым;
+     * - максимальная длина описания — 200 символов;
+     * - дата релиза — не раньше 28 декабря 1895 года;
+     * - продолжительность фильма должна быть положительным числом.
+     */
     @Null(groups = {Create.class})
     @NotNull(groups = {Update.class})
     @Positive(groups = {Update.class})

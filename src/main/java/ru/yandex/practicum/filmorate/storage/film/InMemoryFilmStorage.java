@@ -39,7 +39,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
         films.put(id, newFilm);
         filmStorageUniqueConstraint.add(newFilm);
-        return newFilm;
+        return Film.of(newFilm);
     }
 
     /**
@@ -68,7 +68,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
         films.put(newFilm.getId(), newFilm);
         log.debug("Обновили фильм {}", newFilm);
-        return newFilm;
+        return Film.of(newFilm);
     }
 
     /**
@@ -77,6 +77,7 @@ public class InMemoryFilmStorage implements FilmStorage {
      */
     @Override
     public Optional<Film> get(Integer id) {
+        // TODO return copy?
         return Optional.ofNullable(films.get(id));
     }
 

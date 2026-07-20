@@ -40,7 +40,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.put(id, newUser);
         userStorageUniqueConstraint.add(newUser);
-        return newUser;
+        return User.of(newUser);
     }
 
     /**
@@ -68,7 +68,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         users.put(newUser.getId(), newUser);
         log.debug("Обновили пользователя {}", newUser);
-        return newUser;
+        return User.of(newUser);
     }
 
     /**
@@ -77,6 +77,7 @@ public class InMemoryUserStorage implements UserStorage {
      */
     @Override
     public Optional<User> get(Integer id) {
+        // TODO return copy?
         return Optional.ofNullable(users.get(id));
     }
 

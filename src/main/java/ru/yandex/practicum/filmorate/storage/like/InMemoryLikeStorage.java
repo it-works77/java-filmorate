@@ -2,13 +2,12 @@ package ru.yandex.practicum.filmorate.storage.like;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 
 import java.util.*;
 
 @Slf4j
 @Component
-public class InMemoryLikeStorage implements LikeStorage{
+public class InMemoryLikeStorage implements LikeStorage {
     private final Map<Integer, HashSet<Integer>> filmLikes = new HashMap<>();
 
     @Override
@@ -16,7 +15,7 @@ public class InMemoryLikeStorage implements LikeStorage{
         log.debug("add like to film {} for user {}", filmId, userId);
 
         if (filmLikes.containsKey(filmId)) {
-            HashSet<Integer>  likes = filmLikes.get(filmId);
+            HashSet<Integer> likes = filmLikes.get(filmId);
             likes.add(userId);
             log.debug("Likes added to film {}. New likes: {}", filmId, likes);
         } else {
@@ -56,4 +55,11 @@ public class InMemoryLikeStorage implements LikeStorage{
             throw new NoSuchElementException("No such film in filmLikes %d".formatted(filmId));
         }
     }
+
+    @Override
+    public Map<Integer, HashSet<Integer>> getAllLikes() {
+        return Map.copyOf(filmLikes);
+    }
+
+
 }

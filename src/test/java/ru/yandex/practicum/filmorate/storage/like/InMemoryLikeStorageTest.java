@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryLikeStorageTest {
     private InMemoryLikeStorage inMemoryLikeStorage;
+
     @BeforeEach
     void setUp() {
         inMemoryLikeStorage = new InMemoryLikeStorage();
@@ -19,7 +20,7 @@ class InMemoryLikeStorageTest {
     void addLike() {
         inMemoryLikeStorage.addLike(1, 1);
         assertEquals(1, inMemoryLikeStorage.getFilmLikes(1).size());
-        assertEquals(List.of(1),inMemoryLikeStorage.getFilmLikes(1));
+        assertEquals(List.of(1), inMemoryLikeStorage.getFilmLikes(1));
     }
 
     @Test
@@ -27,7 +28,7 @@ class InMemoryLikeStorageTest {
         inMemoryLikeStorage.addLike(1, 1);
         inMemoryLikeStorage.addLike(2, 2);
 
-        inMemoryLikeStorage.removeLike(1,1);
+        inMemoryLikeStorage.removeLike(1, 1);
         assertEquals(0, inMemoryLikeStorage.getFilmLikes(1).size());
         assertEquals(1, inMemoryLikeStorage.getFilmLikes(2).size());
     }
@@ -37,9 +38,9 @@ class InMemoryLikeStorageTest {
         inMemoryLikeStorage.addLike(1, 1);
         inMemoryLikeStorage.addLike(1, 2);
 
-        inMemoryLikeStorage.removeLike(1,1);
+        inMemoryLikeStorage.removeLike(1, 1);
         assertEquals(1, inMemoryLikeStorage.getFilmLikes(1).size());
-        assertEquals(List.of(2),inMemoryLikeStorage.getFilmLikes(1));
+        assertEquals(List.of(2), inMemoryLikeStorage.getFilmLikes(1));
     }
 
     @Test
