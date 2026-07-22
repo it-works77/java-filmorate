@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityAlreadyExistsException;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -48,19 +47,14 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User update(User newUser) {
         if (newUser.getId() == null) {
-            log.warn("При обновлении пользователя не задан его id");
+            log.debug("При обновлении пользователя не задан его id");
             throw new IllegalArgumentException("При обновлении пользователя не задан его id");
-        }
-
-        if (!users.containsKey(newUser.getId())) {
-            log.warn("Не удалось обновить пользователя. Нет такого id={}", newUser.getId());
-            throw new EntityNotFoundException("Не удалось обновить пользователя. Нет такого id=%d"
-                    .formatted(newUser.getId()));
         }
 
         if (!userStorageUniqueConstraint.isUpdateValid(newUser)) {
             String warnMessage = "Пользователь с логином %s уже сохранен с другим Id=%d"
                     .formatted(newUser.getLogin(), newUser.getId());
+            log.debug(warnMessage);
             throw new EntityAlreadyExistsException(warnMessage);
         }
 

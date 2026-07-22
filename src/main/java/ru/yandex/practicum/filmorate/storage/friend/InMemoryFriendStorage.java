@@ -53,12 +53,12 @@ public class InMemoryFriendStorage implements FriendStorage {
                 return true;
             } else {
                 String msg = "No friend id=%d of user id=%d in friends: %s".formatted(friendId, userId, friends);
-                log.warn(msg);
+                log.debug(msg);
                 return false;
             }
         } else {
             String msg = "No such user id=%d in friends storage".formatted(userId);
-            log.warn(msg);
+            log.debug(msg);
             return false;
 
         }

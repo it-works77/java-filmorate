@@ -25,6 +25,7 @@ public class FilmService {
     }
 
     public Film update(Film newFilm) {
+        checkFilmExistence(newFilm.getId());
         Film updatedFilm = filmStorage.update(newFilm);
         log.debug("Обновили фильм {}", updatedFilm);
         return updatedFilm;
@@ -39,13 +40,15 @@ public class FilmService {
     }
 
     public void addLike(Integer filmId, Integer userId) {
-        checkUserAndFilmExistence(filmId, userId);
+        checkUserExistence(userId);
+        checkFilmExistence(filmId);
         likeStorage.addLike(filmId, userId);
         log.info("Пользователь {} добавил лайк к фильму {}", userId, filmId);
     }
 
     public void removeLike(Integer filmId, Integer userId) {
-        checkUserAndFilmExistence(filmId, userId);
+        checkUserExistence(userId);
+        checkFilmExistence(filmId);
         likeStorage.removeLike(filmId, userId);
         log.info("Пользователь {} удалил лайк к фильму {}", userId, filmId);
     }
@@ -77,14 +80,17 @@ public class FilmService {
                 .toList();
     }
 
-    private void checkUserAndFilmExistence(Integer filmId, Integer userId) {
+    private void checkFilmExistence(Integer filmId) {
         if (filmStorage.get(filmId).isEmpty()) {
             String msg = "Нет фильма с id=%d".formatted(filmId);
             log.warn(msg);
             throw new EntityNotFoundException(msg);
         }
+    }
+
+    private void checkUserExistence(Integer userId) {
         if (userService.get(userId).isEmpty()) {
-            String msg = "Нет пользователя с id=%d".formatted(filmId);
+            String msg = "Нет пользователя с id=%d".formatted(userId);
             log.warn(msg);
             throw new EntityNotFoundException(msg);
         }

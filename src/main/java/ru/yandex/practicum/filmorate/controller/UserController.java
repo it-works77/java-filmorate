@@ -42,6 +42,7 @@ public class UserController {
     @PutMapping
     public User update(@Validated(Update.class) @RequestBody User newUser) {
         log.info("Update user: {}", newUser);
+
         User result = userService.update(newUser);
         log.info("User updated: {}", newUser);
         return result;

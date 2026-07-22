@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.storage.film;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.EntityAlreadyExistsException;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.*;
@@ -49,20 +48,14 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film update(Film newFilm) {
         if (newFilm.getId() == null) {
-            log.warn("При обновлении фильма не задан его id");
+            log.debug("При обновлении фильма не задан его id");
             throw new IllegalArgumentException("При обновлении фильма не задан его id");
-        }
-
-        if (!films.containsKey(newFilm.getId())) {
-            log.warn("Не удалось обновить фильм. Нет фильма с id={}", newFilm.getId());
-            throw new EntityNotFoundException("Не удалось обновить фильм. Нет фильма с id=%d"
-                    .formatted(newFilm.getId()));
         }
 
         if (!filmStorageUniqueConstraint.isUpdateValid(newFilm)) {
             String warnMessage = "Фильм %s уже сохранен с другим Id=%d"
                     .formatted(newFilm.getName(), newFilm.getId());
-            log.warn(warnMessage);
+            log.debug(warnMessage);
             throw new EntityAlreadyExistsException(warnMessage);
         }
 

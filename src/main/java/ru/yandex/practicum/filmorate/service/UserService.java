@@ -37,7 +37,7 @@ public class UserService {
     }
 
     public User update(User newUser) {
-
+        checkUserExistence(newUser.getId());
         User updatedUser = userStorage.update(newUser);
         log.info("Обновили пользователя {}", updatedUser);
         return updatedUser;
@@ -67,7 +67,7 @@ public class UserService {
                 .toList();
     }
 
-    public Collection<User> getFriends( Integer userId) {
+    public Collection<User> getFriends(Integer userId) {
         checkUserExistence(userId);
         List<Integer> friendIds = friendStorage.getFriends(userId);
         return friendIds.stream()
