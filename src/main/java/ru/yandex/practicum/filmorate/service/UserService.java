@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,7 +57,7 @@ public class UserService {
         log.info("Пользователь {} удалил друга {}", userId, friendId);
     }
 
-    public Collection<User> getCommonFriends(@Positive Integer id, @Positive Integer otherId) {
+    public Collection<User> getCommonFriends(Integer id, Integer otherId) {
         Collection<Integer> commonFriendsIds = getCommonFriendIds(id, otherId);
         return commonFriendsIds.stream()
                 .map(userStorage::get)
@@ -68,7 +67,7 @@ public class UserService {
                 .toList();
     }
 
-    public Collection<User> getFriends(@Positive Integer userId) {
+    public Collection<User> getFriends( Integer userId) {
         checkUserExistence(userId);
         List<Integer> friendIds = friendStorage.getFriends(userId);
         return friendIds.stream()
