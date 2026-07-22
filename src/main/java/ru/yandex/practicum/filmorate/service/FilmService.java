@@ -31,8 +31,9 @@ public class FilmService {
         return updatedFilm;
     }
 
-    public Optional<Film> get(Integer filmId) {
-        return filmStorage.get(filmId);
+    public Film get(Integer filmId) {
+        return filmStorage.get(filmId).orElseThrow(() ->
+                new EntityNotFoundException("Не найден фильм с id=" + filmId));
     }
 
     public Collection<Film> getAll() {
@@ -89,10 +90,12 @@ public class FilmService {
     }
 
     private void checkUserExistence(Integer userId) {
-        if (userService.get(userId).isEmpty()) {
+        try {
+            userService.get(userId);
+        } catch (RuntimeException e) {
             String msg = "Нет пользователя с id=%d".formatted(userId);
             log.warn(msg);
-            throw new EntityNotFoundException(msg);
+            throw e;
         }
     }
 }

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.Create;
@@ -54,8 +53,7 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUser(@PathVariable @Positive Integer id) {
         log.info("Получаем пользователя по id={}", id);
-        return userService.get(id).orElseThrow(() ->
-                new EntityNotFoundException("Не найден пользователь с id=" + id));
+        return userService.get(id);
     }
 
     /*

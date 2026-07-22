@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.Create;
@@ -51,8 +50,7 @@ public class FilmController {
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable @Positive Integer id) {
         log.info("Получаем фильм по id={}", id);
-        return filmService.get(id).orElseThrow(() ->
-                new EntityNotFoundException("Не найден фильм с id=" + id));
+        return filmService.get(id);
     }
 
     /*

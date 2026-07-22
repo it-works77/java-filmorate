@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,8 +31,9 @@ public class UserService {
         return userStorage.add(user);
     }
 
-    public Optional<User> get(Integer userId) {
-        return userStorage.get(userId);
+    public User get(Integer userId) {
+        return userStorage.get(userId).orElseThrow(() ->
+                new EntityNotFoundException("Не найден пользователь с id=" + userId));
     }
 
     public User update(User newUser) {
