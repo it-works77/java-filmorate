@@ -1,96 +1,101 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.EntityAlreadyExistsException;
+import ru.yandex.practicum.filmorate.config.AppConfig;
 import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class FilmService {
-    private final Map<Integer, Film> films = new HashMap<>();
-    private int currentId = 1; // Максимальный занятый идентификатор. Освободившиеся не занимаем
-
-    /*
-     * - название не может быть пустым;
-     * - максимальная длина описания — 200 символов;
-     * - дата релиза — не раньше 28 декабря 1895 года;
-     * - продолжительность фильма должна быть положительным числом.
-     */
-
-    public Collection<Film> getAll() {
-        return films.values().stream()
-                .map(Film::of)
-                .collect(Collectors.toList());
-    }
+    private final FilmStorage filmStorage;
+    private final LikeStorage likeStorage;
+    private final UserService userService;
+    private final AppConfig appConfig;
 
     public Film add(Film film) {
-        Optional<Film> oldFilm = getFilm(film);
-        if (oldFilm.isPresent()) {
-            log.warn("Фильм {} уже существует", film.getName());
-            throw new EntityAlreadyExistsException("Фильм %s уже существует".formatted(film.getName()));
-        }
-
-        int id = getNextId();
-        Film newFilm = Film.builder()
-                .id(id)
-                .name(film.getName())
-                .description(film.getDescription())
-                .releaseDate(film.getReleaseDate())
-                .duration(film.getDuration())
-                .build();
-
-        films.put(id, newFilm);
-        return newFilm;
+        return filmStorage.add(film);
     }
 
     public Film update(Film newFilm) {
-        if (newFilm.getId() == null) {
-            log.warn("При обновлении фильма не задан его id");
-            throw new IllegalArgumentException("При обновлении фильма не задан его id");
-        }
-
-        if (!films.containsKey(newFilm.getId())) {
-            log.warn("Не удалось обновить фильм. Нет фильма с id={}", newFilm.getId());
-            throw new EntityNotFoundException("Не удалось обновить фильм. Нет фильма с id=%d"
-                    .formatted(newFilm.getId()));
-        }
-
-        // Проверим, есть ли такой объект без учета id
-        Optional<Film> oldFilm = getFilm(newFilm);
-        if (oldFilm.isPresent()) {
-            if (oldFilm.get().getId()
-                    .equals(newFilm.getId())) {
-                log.debug("Такой фильм уже сохранен с тем же самым Id {}", newFilm);
-                return newFilm;
-            } else {
-                String warnMessage = "Фильм %s уже сохранен с другим Id=%d"
-                        .formatted(newFilm.getName(), oldFilm.get().getId());
-                log.warn(warnMessage);
-                throw new EntityAlreadyExistsException(warnMessage);
-            }
-        }
-
-        films.put(newFilm.getId(), newFilm);
-        log.debug("Обновили фильм {}", newFilm);
-        return newFilm;
-
+        checkFilmExistence(newFilm.getId());
+        Film updatedFilm = filmStorage.update(newFilm);
+        log.debug("Обновили фильм {}", updatedFilm);
+        return updatedFilm;
     }
 
-    private Optional<Film> getFilm(Film film) {
-        return films.values().stream()
-                .filter(film::equals)
-                .findFirst();
+    public Film get(Integer filmId) {
+        return filmStorage.get(filmId).orElseThrow(() ->
+                new EntityNotFoundException("Не найден фильм с id=" + filmId));
     }
 
-    private Integer getNextId() {
-        return currentId++;
+    public Collection<Film> getAll() {
+        return filmStorage.getAll();
+    }
+
+    public void addLike(Integer filmId, Integer userId) {
+        checkUserExistence(userId);
+        checkFilmExistence(filmId);
+        likeStorage.addLike(filmId, userId);
+        log.info("Пользователь {} добавил лайк к фильму {}", userId, filmId);
+    }
+
+    public void removeLike(Integer filmId, Integer userId) {
+        checkUserExistence(userId);
+        checkFilmExistence(filmId);
+        likeStorage.removeLike(filmId, userId);
+        log.info("Пользователь {} удалил лайк к фильму {}", userId, filmId);
+    }
+
+    public Collection<Film> getTopFilmsByLikes() {
+        return getTopFilmsByLikes(appConfig.getTopByLikesFilmsNumber());
+    }
+
+    public Collection<Film> getTopFilmsByLikes(Integer topFilmsNumber) {
+        if (topFilmsNumber < 1) {
+            throw new IllegalArgumentException("Количество популярных фильмов в запросе должно быть больше нуля");
+        }
+
+        Map<Integer, HashSet<Integer>> likes = likeStorage.getAllLikes();
+        List<Integer> filmIds = likes.entrySet().stream()
+                .sorted((e1, e2) ->
+                        Integer.compare(e2.getValue().size(), e1.getValue().size()))
+                .limit(topFilmsNumber)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        log.debug("sorted filmIds = {}", filmIds);
+
+        return filmIds.stream()
+                .map(filmStorage::get)
+                .map(filmOpt -> filmOpt.orElseThrow(() ->
+                        new IllegalStateException("Неконсистентное состояние likeStorage" +
+                                " и filmStorage: не найден фильм по Id")))
+                .toList();
+    }
+
+    private void checkFilmExistence(Integer filmId) {
+        if (filmStorage.get(filmId).isEmpty()) {
+            String msg = "Нет фильма с id=%d".formatted(filmId);
+            log.warn(msg);
+            throw new EntityNotFoundException(msg);
+        }
+    }
+
+    private void checkUserExistence(Integer userId) {
+        try {
+            userService.get(userId);
+        } catch (RuntimeException e) {
+            String msg = "Нет пользователя с id=%d".formatted(userId);
+            log.warn(msg);
+            throw e;
+        }
     }
 }
