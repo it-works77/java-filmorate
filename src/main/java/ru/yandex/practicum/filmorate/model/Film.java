@@ -3,10 +3,15 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import ru.yandex.practicum.filmorate.annotation.NotBefore;
+import ru.yandex.practicum.filmorate.enums.Genre;
+import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Film.
@@ -43,6 +48,15 @@ public class Film {
             message = "Продолжительность фильма должна быть положительным числом")
     private int duration; // продолжительность фильма в минутах
 
+    @NotNull(groups = {Create.class, Update.class})
+    private HashSet<Genre> genres; // жанры фильма
+
+    @NotNull(groups = {Create.class, Update.class})
+    private MpaRating mpa; // возрастной рейтинг
+
+    @NotNull(groups = {Update.class})
+    private Set<Integer> userLikes; // идентификаторы пользователей, поставивших лайк фильму
+
     public static Film of(Film film) {
         return Film.builder()
                 .id(film.getId())
@@ -50,6 +64,8 @@ public class Film {
                 .description(film.getDescription())
                 .releaseDate(film.getReleaseDate())
                 .duration(film.getDuration())
+                .genres(film.getGenres())
+                .mpa(film.getMpa())
                 .build();
     }
 }

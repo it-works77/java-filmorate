@@ -8,6 +8,8 @@ import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+
 
 @Data
 @Builder
@@ -41,6 +43,9 @@ public class User {
     @PastOrPresent(groups = {Create.class, Update.class}, message = "дата рождения не может быть в будущем")
     private LocalDate birthday; // дата рождения
 
+    @NotNull(groups = {Create.class, Update.class})
+    private HashSet<FriendLink> friends; // друзья пользователя
+
     public static User of(User user) {
         return User.builder()
                 .id(user.getId())
@@ -48,6 +53,7 @@ public class User {
                 .email(user.getEmail())
                 .name(user.getName())
                 .birthday(user.getBirthday())
+                .friends(user.getFriends())
                 .build();
     }
 }
