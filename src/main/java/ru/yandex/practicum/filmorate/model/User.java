@@ -43,8 +43,8 @@ public class User {
     @PastOrPresent(groups = {Create.class, Update.class}, message = "дата рождения не может быть в будущем")
     private LocalDate birthday; // дата рождения
 
-    @NotNull(groups = {Create.class, Update.class})
-    private HashSet<FriendLink> friends; // друзья пользователя
+    @Builder.Default
+    private HashSet<FriendLink> friends = new HashSet<>(); // друзья пользователя
 
     public static User of(User user) {
         return User.builder()

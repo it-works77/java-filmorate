@@ -88,13 +88,13 @@ public class InMemoryUserStorage implements UserStorage {
      * @return удаленного пользователя или null, если таким id не было
      */
     @Override
-    public Optional<User> remove(Integer id) {
+    public boolean remove(Integer id) {
         User user = users.get(id);
         if (user == null) {
-            return Optional.empty();
+            return false;
         } else {
             userStorageUniqueConstraint.remove(user);
-            return Optional.of(users.remove(id));
+            return true;
         }
     }
 

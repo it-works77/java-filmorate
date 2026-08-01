@@ -89,7 +89,7 @@ public class InMemoryFilmStorage implements FilmStorage {
      * @return удаленный фильм или null, если таким id не было
      */
     @Override
-    public Optional<Film> remove(Integer id) {
+    public boolean remove(Integer id) {
         Film film = films.get(id);
         if (film == null) {
             return Optional.empty();

@@ -67,7 +67,7 @@ WHERE uf.user_id = 1
 
 ```sql
 INSERT INTO films (name, description, release_date, duration, mpa) VALUES
-    ('The Great Adventure', 'An epic journey through time and space', '2023-06-15', 120, 'PG-13'),
+    ('The Great Adventure', 'An epic journey through time and space', '2023-06-15', 120, 'PG-13');
 ```
 
 #### Получение фильма по Id
