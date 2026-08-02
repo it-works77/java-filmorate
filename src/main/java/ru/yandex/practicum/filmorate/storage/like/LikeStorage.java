@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.like;
 
+import ru.yandex.practicum.filmorate.model.FilmLike;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;

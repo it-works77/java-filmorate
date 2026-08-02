@@ -22,7 +22,7 @@ public class FilmService {
     private final AppConfig appConfig;
 
     public FilmService(@Qualifier("dbFilmStorage") FilmStorage filmStorage,
-                       LikeStorage likeStorage,
+                       @Qualifier("dbLikeStorage") LikeStorage likeStorage,
                        UserService userService,
                        AppConfig appConfig) {
         this.filmStorage = filmStorage;

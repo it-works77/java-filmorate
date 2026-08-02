@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 public enum MpaRating {
     G(1, "G"),       // Нет возрастных ограничений
@@ -16,6 +18,13 @@ public enum MpaRating {
     MpaRating(int code, String displayName) {
         this.code = code;
         this.displayName = displayName;
+    }
+
+    public static MpaRating byCode(int code) {
+        return Arrays.stream(values())
+                .filter(rating -> rating.code == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Неизвестный код MPA рейтинга: " + code));
     }
 
 }

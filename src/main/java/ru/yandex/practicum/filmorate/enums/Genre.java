@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 public enum Genre {
     COMEDY(1, "Комедия"),
@@ -17,5 +19,12 @@ public enum Genre {
     Genre(int code, String displayName) {
         this.code = code;
         this.displayName = displayName;
+    }
+
+    public static Genre byCode(int code) {
+        return Arrays.stream(values())
+                .filter(genre -> genre.code == code)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Неизвестный код жанра: " + code));
     }
 }

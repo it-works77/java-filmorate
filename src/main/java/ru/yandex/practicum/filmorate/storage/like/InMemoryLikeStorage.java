@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage.like;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.FilmLike;
 
 import java.util.*;
 

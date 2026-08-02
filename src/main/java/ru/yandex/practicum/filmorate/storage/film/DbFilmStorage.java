@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import static ru.yandex.practicum.filmorate.storage.film.DbFilmStorageQueries.*;

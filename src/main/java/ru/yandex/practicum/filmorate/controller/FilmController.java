@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.FilmRequestDto;
+import ru.yandex.practicum.filmorate.dto.FilmResponseDto;
+import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.Create;
@@ -25,11 +28,11 @@ public class FilmController {
      * добавление фильма;
      * */
     @PostMapping
-    public Film create(@Validated(Create.class) @RequestBody Film film) {
-        log.info("Create film: {}", film);
-        Film result = filmService.add(film);
+    public FilmResponseDto create(@Validated(Create.class)  @RequestBody FilmRequestDto filmRequestDto) {
+        log.info("Create film: {}", filmRequestDto);
+        Film result = filmService.add(FilmMapper.mapFilmCreateRequestDtoToFilm(filmRequestDto));
         log.info("Film created: {}", result);
-        return result;
+        return FilmMapper.mapFilmToFilmResponseDto(result);
 
     }
 
