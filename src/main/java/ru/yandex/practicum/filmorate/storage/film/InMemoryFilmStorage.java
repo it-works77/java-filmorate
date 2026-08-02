@@ -92,10 +92,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     public boolean remove(Integer id) {
         Film film = films.get(id);
         if (film == null) {
-            return Optional.empty();
+            return false;
         } else {
             filmStorageUniqueConstraint.remove(film);
-            return Optional.of(films.remove(id));
+            return true;
         }
     }
 
