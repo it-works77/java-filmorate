@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.config.AppConfig;
 import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
@@ -13,12 +14,22 @@ import java.util.*;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class FilmService {
+
     private final FilmStorage filmStorage;
     private final LikeStorage likeStorage;
     private final UserService userService;
     private final AppConfig appConfig;
+
+    public FilmService(@Qualifier("dbFilmStorage") FilmStorage filmStorage,
+                       LikeStorage likeStorage,
+                       UserService userService,
+                       AppConfig appConfig) {
+        this.filmStorage = filmStorage;
+        this.likeStorage = likeStorage;
+        this.userService = userService;
+        this.appConfig = appConfig;
+    }
 
     public Film add(Film film) {
         return filmStorage.add(film);

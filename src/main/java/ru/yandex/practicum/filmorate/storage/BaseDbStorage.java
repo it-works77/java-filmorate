@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.InternalServerException;
 
 import java.sql.PreparedStatement;
@@ -55,13 +56,7 @@ public class BaseDbStorage<T> {
     }
 
     protected int update(String query, Object... params) {
-        int rowsUpdated = jdbc.update(query, params);
-        if (rowsUpdated == 0) {
-            String msg = "Не удалось обновить данные. Query: %s".formatted(query);
-            log.debug(msg);
-            throw new InternalServerException(msg);
-        }
-        return rowsUpdated;
+        return jdbc.update(query, params);
     }
 
     protected boolean delete(String query, Object... params) {
