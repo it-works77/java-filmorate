@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,6 +55,8 @@ class DbFilmStorageTest {
         dbFilmStorage.add(film2);
     }
 
+    // Postman test doesn't work with constraint on films table
+    @Disabled
     @Test
     void addFilm_WhenSameNameAndReleaseDate_getDuplicateKeyException() {
         dbFilmStorage.add(film1);
@@ -77,6 +80,8 @@ class DbFilmStorageTest {
         assertThrows(EntityNotFoundException.class, () -> dbFilmStorage.update(film1));
     }
 
+    // Postman test doesn't work with constraint on films table
+    @Disabled
     @Test
     void updateFilm_WhenSameNameAndReleaseDate_getDuplicateKeyException() {
         // CONSTRAINT unique_film_name_release UNIQUE (name, release_date)

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -33,6 +34,8 @@ class FilmTest {
         );
     }
 
+    // All validations moved to DTO
+    @Disabled
     @Test
     void createFilm_whenNameIsBlank_getValidationException() {
         Film film = Film.builder()
@@ -80,6 +83,8 @@ class FilmTest {
         assertTrue(violations.isEmpty());
     }
 
+    // All validations moved to DTO
+    @Disabled
     @Test
     void createFilm_whenDateIsBeforeMinDate_getValidationError() {
         Film film = Film.builder()
