@@ -1,7 +1,17 @@
 spring:
   main:
     log-startup-info: true
-
+  datasource:
+    url: jdbc:h2:mem:filmorate;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
 logging.level:
   root: INFO
   ru.yandex.practicum.filmorate: DEBUG
