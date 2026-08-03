@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.enums.Genre;
 import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

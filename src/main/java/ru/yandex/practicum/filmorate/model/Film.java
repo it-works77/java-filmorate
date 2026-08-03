@@ -1,17 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
 import lombok.*;
-import ru.yandex.practicum.filmorate.annotation.NotBefore;
 import ru.yandex.practicum.filmorate.enums.Genre;
 import ru.yandex.practicum.filmorate.enums.MpaRating;
-import ru.yandex.practicum.filmorate.validation.Create;
-import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
