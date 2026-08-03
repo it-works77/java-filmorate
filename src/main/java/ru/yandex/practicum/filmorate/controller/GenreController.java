@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.dto.MpaResponseDto;
+import ru.yandex.practicum.filmorate.dto.GenreResponseDto;
 import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
@@ -16,23 +16,24 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
-@RequestMapping("/mpa")
+@RequestMapping("/genres")
 @Validated
 @AllArgsConstructor
-public class MpaController {
+public class GenreController {
     private final FilmService filmService;
 
     @GetMapping
-    public Collection<MpaResponseDto> getMpaAll() {
-        log.info("Get all MPA ratings");
-        return filmService.getMpaAll().stream()
-                .map(FilmMapper::mpaRatingToMpaResponseDto)
+    public Collection<GenreResponseDto> getMpaAll() {
+        log.info("Get all genres ratings");
+        return filmService.getGenreAll().stream()
+                .map(FilmMapper::genreToGenreResponseDto)
                 .toList();
     }
 
-    @GetMapping("/{mpaId}")
-    public MpaResponseDto getMpa(@PathVariable @Positive Integer mpaId) {
-        log.info("Получаем MPA по id={}", mpaId);
-        return FilmMapper.mpaRatingToMpaResponseDto(filmService.getMpa(mpaId));
+    @GetMapping("/{genreId}")
+    public GenreResponseDto getMpa(@PathVariable @Positive Integer genreId) {
+        log.info("Получаем жанр по id={}", genreId);
+        return FilmMapper.genreToGenreResponseDto(filmService.getGenre(genreId));
     }
+
 }

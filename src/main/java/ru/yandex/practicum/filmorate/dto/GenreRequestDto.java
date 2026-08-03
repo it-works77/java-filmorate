@@ -8,10 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class GenreDto {
+public class GenreRequestDto {
     @NotNull(message = "ID жанра не может быть null")
     @Positive(message = "ID жанра должен быть положительным числом")
     private Integer id;

@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.dto.*;
 import ru.yandex.practicum.filmorate.enums.Genre;
 import ru.yandex.practicum.filmorate.enums.MpaRating;
-import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public final class FilmMapper {
                 .duration(film.getDuration())
                 .mpa(new MpaRequestDto(film.getMpa().getCode()))
                 .genres(film.getGenres().stream()
-                        .map(e -> new GenreDto(e.getCode()))
+                        .map(e -> new GenreRequestDto(e.getCode()))
                         .collect(Collectors.toSet())
                 )
                 .build();
@@ -51,7 +50,16 @@ public final class FilmMapper {
         return MpaRating.byCode(mpaRequestDto.getId());
     }
 
-    public static MpaResponseDto MpaRatingToMpaResponseDto(MpaRating mpaRating) {
+    public static MpaResponseDto mpaRatingToMpaResponseDto(MpaRating mpaRating) {
         return new MpaResponseDto(mpaRating.getCode(), mpaRating.getDisplayName());
+    }
+
+
+    public static Genre genreRequestDtoToGenre(GenreRequestDto genreRequestDto) {
+        return Genre.byCode(genreRequestDto.getId());
+    }
+
+    public static GenreResponseDto genreToGenreResponseDto(Genre genre) {
+        return new GenreResponseDto(genre.getCode(), genre.getDisplayName());
     }
 }

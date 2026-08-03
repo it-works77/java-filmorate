@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 @AllArgsConstructor
 public class MpaRequestDto {
     @NotNull(message = "ID MPA не может быть null")

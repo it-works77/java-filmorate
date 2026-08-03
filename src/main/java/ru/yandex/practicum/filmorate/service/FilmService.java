@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.config.AppConfig;
+import ru.yandex.practicum.filmorate.enums.Genre;
 import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -99,6 +100,14 @@ public class FilmService {
 
     public Collection<MpaRating> getMpaAll() {
         return Arrays.stream(MpaRating.values()).toList();
+    }
+
+    public Genre getGenre(Integer id) {
+        return Genre.byCode(id);
+    }
+
+    public Collection<Genre> getGenreAll() {
+        return Arrays.stream(Genre.values()).toList();
     }
 
     private void checkFilmExistence(Integer filmId) {

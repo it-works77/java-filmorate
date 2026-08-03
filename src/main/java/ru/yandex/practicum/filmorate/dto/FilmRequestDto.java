@@ -33,7 +33,7 @@ public class FilmRequestDto {
             message = "Продолжительность фильма должна быть положительным числом")
     private int duration; // продолжительность фильма в минутах
 
-    private List<GenreDto> genres = new ArrayList<>(); // жанры фильма
+    private List<GenreRequestDto> genres = new ArrayList<>(); // жанры фильма
 
     @NotNull(groups = {Create.class, Update.class})
     private MpaRequestDto mpa; // возрастной рейтинг
