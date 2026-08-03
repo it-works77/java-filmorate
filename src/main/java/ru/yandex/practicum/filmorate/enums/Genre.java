@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.enums;
 
 import lombok.Getter;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 
 import java.util.Arrays;
 
@@ -25,6 +26,6 @@ public enum Genre {
         return Arrays.stream(values())
                 .filter(genre -> genre.code == code)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Неизвестный код жанра: " + code));
+                .orElseThrow(() -> new EntityNotFoundException("Неизвестный код жанра: " + code));
     }
 }

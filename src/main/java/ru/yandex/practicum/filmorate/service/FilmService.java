@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.config.AppConfig;
+import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -90,6 +91,14 @@ public class FilmService {
                         new IllegalStateException("Неконсистентное состояние likeStorage" +
                                 " и filmStorage: не найден фильм по Id")))
                 .toList();
+    }
+
+    public MpaRating getMpa(Integer id) {
+        return MpaRating.byCode(id);
+    }
+
+    public Collection<MpaRating> getMpaAll() {
+        return Arrays.stream(MpaRating.values()).toList();
     }
 
     private void checkFilmExistence(Integer filmId) {

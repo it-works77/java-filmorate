@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class MpaDto {
+public class MpaRequestDto {
     @NotNull(message = "ID MPA не может быть null")
     @Positive(message = "ID MPA должен быть положительным числом")
     private Integer id;

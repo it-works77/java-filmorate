@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.annotation.NotBefore;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.validation.Update;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 public class FilmRequestDto {
@@ -38,5 +36,5 @@ public class FilmRequestDto {
     private List<GenreDto> genres = new ArrayList<>(); // жанры фильма
 
     @NotNull(groups = {Create.class, Update.class})
-    private MpaDto mpa; // возрастной рейтинг
+    private MpaRequestDto mpa; // возрастной рейтинг
 }

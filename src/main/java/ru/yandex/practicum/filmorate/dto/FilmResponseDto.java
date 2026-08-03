@@ -1,12 +1,7 @@
 package ru.yandex.practicum.filmorate.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.annotation.NotBefore;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -26,5 +21,5 @@ public class FilmResponseDto {
 
     private Set<GenreDto> genres; // жанры фильма
 
-    private MpaDto mpa; // возрастной рейтинг
+    private MpaRequestDto mpa; // возрастной рейтинг
 }

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.enums;
 
 import lombok.Getter;
+import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 
 import java.util.Arrays;
 
@@ -24,7 +25,7 @@ public enum MpaRating {
         return Arrays.stream(values())
                 .filter(rating -> rating.code == code)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Неизвестный код MPA рейтинга: " + code));
+                .orElseThrow(() -> new EntityNotFoundException("Неизвестный код MPA рейтинга: " + code));
     }
 
 }
