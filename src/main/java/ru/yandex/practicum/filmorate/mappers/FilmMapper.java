@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.enums.Genre;
 import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,8 +19,8 @@ public final class FilmMapper {
         MpaRating mpa = MpaRating.byCode(filmRequestDto.getMpa().getId());
 
         Set<Genre> genres = filmRequestDto.getGenres().stream()
-                    .map(e -> Genre.byCode(e.getId()))
-                    .collect(Collectors.toSet());
+                .map(e -> Genre.byCode(e.getId()))
+                .collect(Collectors.toSet());
 
         return Film.builder()
                 .id(filmRequestDto.getId())
@@ -42,7 +44,10 @@ public final class FilmMapper {
                         film.getMpa().getDisplayName()))
                 .genres(film.getGenres().stream()
                         .map(e -> new GenreResponseDto(e.getCode(), e.getDisplayName()))
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toCollection(
+                                        () -> new TreeSet<>(Comparator.comparing(GenreResponseDto::getId))
+                                )
+                        )
                 )
                 .build();
     }
