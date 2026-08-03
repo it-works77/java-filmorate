@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dto.UserRequestDto;
+import ru.yandex.practicum.filmorate.dto.UserResponseDto;
+import ru.yandex.practicum.filmorate.mappers.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.Create;
@@ -25,44 +28,45 @@ public class UserController {
      * создание пользователя;
      * */
     @PostMapping
-    public User create(@Validated(Create.class) @RequestBody User user) {
+    public UserResponseDto create(@Validated(Create.class) @RequestBody UserRequestDto userRequestDto) {
         /* Добавьте логирование для операций, которые изменяют сущности — добавляют и обновляют их.
          * Также логируйте причины ошибок — например, если валидация не пройдена.
          * */
-        log.info("Create user: {}", user);
-        User result = userService.add(user);
-        log.info("User created: {}", result);
-        return result;
+        log.info("Create user: {}", userRequestDto);
+        User user = userService.add(UserMapper.mapUserRequestDtoToUser(userRequestDto));
+        log.info("User created: {}", user);
+        return UserMapper.mapUserToUserResponseDto(user);
     }
 
     /*
      * обновление пользователя;
      * */
     @PutMapping
-    public User update(@Validated(Update.class) @RequestBody User newUser) {
-        log.info("Update user: {}", newUser);
-
-        User result = userService.update(newUser);
-        log.info("User updated: {}", newUser);
-        return result;
+    public UserResponseDto update(@Validated(Update.class) @RequestBody UserRequestDto userRequestDto) {
+        log.info("Update user: {}", userRequestDto);
+        User user = userService.update(UserMapper.mapUserRequestDtoToUser(userRequestDto));
+        log.info("User updated: {}", user);
+        return UserMapper.mapUserToUserResponseDto(user);
     }
 
     /*
      * получение пользователя по id
      */
     @GetMapping("/{id}")
-    public User getUser(@PathVariable @Positive Integer id) {
+    public UserResponseDto getUser(@PathVariable @Positive Integer id) {
         log.info("Получаем пользователя по id={}", id);
-        return userService.get(id);
+        return UserMapper.mapUserToUserResponseDto(userService.get(id));
     }
 
     /*
      * получение списка всех пользователей.
      */
     @GetMapping
-    public Collection<User> getAll() {
+    public Collection<UserResponseDto> getAll() {
         log.info("Get all users");
-        return userService.getAll();
+        return userService.getAll().stream()
+                .map(UserMapper::mapUserToUserResponseDto)
+                .toList();
     }
 
     /*

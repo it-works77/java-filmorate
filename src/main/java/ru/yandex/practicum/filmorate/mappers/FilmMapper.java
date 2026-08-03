@@ -17,7 +17,7 @@ public final class FilmMapper {
         MpaRating mpa = MpaRating.byCode(filmRequestDto.getMpa().getId());
 
         Set<Genre> genres = filmRequestDto.getGenres().stream()
-                    .map( e -> Genre.byCode(e.getId()))
+                    .map(e -> Genre.byCode(e.getId()))
                     .collect(Collectors.toSet());
 
         return Film.builder()
@@ -47,7 +47,7 @@ public final class FilmMapper {
                 .build();
     }
 
-    public static MpaRating MpaRequestDtoToMpaRating(MpaRequestDto mpaRequestDto) {
+    public static MpaRating mpaRequestDtoToMpaRating(MpaRequestDto mpaRequestDto) {
         return MpaRating.byCode(mpaRequestDto.getId());
     }
 

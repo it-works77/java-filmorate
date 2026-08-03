@@ -25,8 +25,8 @@ import static ru.yandex.practicum.filmorate.storage.film.DbFilmStorageQueries.*;
 @Qualifier("dbFilmStorage")
 public class DbFilmStorage extends BaseDbStorage<Film> implements FilmStorage {
 
-    public DbFilmStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
-        super(jdbc, mapper);
+    public DbFilmStorage(JdbcTemplate jdbc, RowMapper<Film> filmMapper) {
+        super(jdbc, filmMapper);
     }
 
     @Override
