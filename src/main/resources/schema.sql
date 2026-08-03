@@ -24,8 +24,9 @@ CREATE TABLE IF NOT EXISTS  films (
     description VARCHAR(200) DEFAULT '',
     release_date DATE NOT NULL,
     duration INTEGER NOT NULL,
-    mpa VARCHAR(50) NOT NULL,
-    CONSTRAINT unique_film_name_release UNIQUE (name, release_date)
+    mpa VARCHAR(50) NOT NULL
+    -- Postman tests doesn't work with this constraint!
+    -- CONSTRAINT unique_film_name_release UNIQUE (name, release_date)
 );
 
 CREATE TABLE IF NOT EXISTS  film_genres (

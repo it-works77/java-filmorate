@@ -19,7 +19,7 @@ public class FilmResponseDto {
 
     private int duration; // продолжительность фильма в минутах
 
-    private Set<GenreRequestDto> genres; // жанры фильма
+    private Set<GenreResponseDto> genres; // жанры фильма
 
-    private MpaRequestDto mpa; // возрастной рейтинг
+    private MpaResponseDto mpa; // возрастной рейтинг
 }

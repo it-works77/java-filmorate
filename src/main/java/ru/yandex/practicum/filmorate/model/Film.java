@@ -39,7 +39,7 @@ public class Film {
     private int duration; // продолжительность фильма в минутах
 
     @Builder.Default
-    private List<Genre> genres = new ArrayList<>(); // жанры фильма
+    private Set<Genre> genres = new HashSet<>(); // жанры фильма
 
     private MpaRating mpa; // возрастной рейтинг
 

@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.enums.MpaRating;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,9 +17,9 @@ public final class FilmMapper {
     public static Film mapFilmRequestDtoToFilm(FilmRequestDto filmRequestDto) {
         MpaRating mpa = MpaRating.byCode(filmRequestDto.getMpa().getId());
 
-        List<Genre> genres = filmRequestDto.getGenres().stream()
+        Set<Genre> genres = filmRequestDto.getGenres().stream()
                     .map( e -> Genre.byCode(e.getId()))
-                    .toList();
+                    .collect(Collectors.toSet());
 
         return Film.builder()
                 .id(filmRequestDto.getId())
@@ -38,9 +39,10 @@ public final class FilmMapper {
                 .description(film.getDescription())
                 .releaseDate(film.getReleaseDate())
                 .duration(film.getDuration())
-                .mpa(new MpaRequestDto(film.getMpa().getCode()))
+                .mpa(new MpaResponseDto(film.getMpa().getCode(),
+                        film.getMpa().getDisplayName()))
                 .genres(film.getGenres().stream()
-                        .map(e -> new GenreRequestDto(e.getCode()))
+                        .map(e -> new GenreResponseDto(e.getCode(), e.getDisplayName()))
                         .collect(Collectors.toSet())
                 )
                 .build();

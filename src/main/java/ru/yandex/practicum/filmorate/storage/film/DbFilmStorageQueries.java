@@ -32,6 +32,19 @@ public final class DbFilmStorageQueries {
                 mpa = ?
             WHERE id = ?;""";
 
+    public static final String INSERT_GENRE_QUERY = """
+            INSERT INTO film_genres (film_id, genre)
+            VALUES (?, ?);""";
+
+    public static final String DELETE_FILM_GENRES_BY_ID_QUERY = """
+            DELETE
+            FROM film_genres
+            WHERE film_id = ?;""";
+
+    public static final String FIND_FILM_GENRES_BY_ID_QUERY = """
+            SELECT genre
+            FROM film_genres
+            WHERE film_id = ?;""";
 
     private DbFilmStorageQueries() {
     }

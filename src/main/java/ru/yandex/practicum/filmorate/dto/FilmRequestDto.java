@@ -8,7 +8,9 @@ import ru.yandex.practicum.filmorate.validation.Update;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class FilmRequestDto {
@@ -33,7 +35,7 @@ public class FilmRequestDto {
             message = "Продолжительность фильма должна быть положительным числом")
     private int duration; // продолжительность фильма в минутах
 
-    private List<GenreRequestDto> genres = new ArrayList<>(); // жанры фильма
+    private Set<GenreRequestDto> genres = new HashSet<>(); // жанры фильма
 
     @NotNull(groups = {Create.class, Update.class})
     private MpaRequestDto mpa; // возрастной рейтинг
