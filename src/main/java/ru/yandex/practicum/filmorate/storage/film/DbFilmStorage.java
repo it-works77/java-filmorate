@@ -12,10 +12,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.yandex.practicum.filmorate.storage.film.DbFilmStorageQueries.*;
@@ -106,7 +103,9 @@ public class DbFilmStorage extends BaseDbStorage<Film> implements FilmStorage {
         List<FilmGenre> filmGenres = jdbc.query(FIND_FILM_GENRES_BY_ID_QUERY, new FilmGenreRowMapper(), id);
         return filmGenres.stream()
                 .map(filmGenre -> Genre.valueOf(filmGenre.getGenre()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(() ->
+                        new TreeSet<>(Comparator.comparingInt(Genre::getCode)))
+                );
     }
 
 }

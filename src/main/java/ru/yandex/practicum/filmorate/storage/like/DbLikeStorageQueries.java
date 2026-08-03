@@ -17,7 +17,7 @@ public final class DbLikeStorageQueries {
     public static final String DELETE_QUERY = """
             DELETE
             FROM film_likes
-            user_id = ? AND film_id = ?;""";
+            WHERE user_id = ? AND film_id = ?;""";
 
 
     private DbLikeStorageQueries() {
