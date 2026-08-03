@@ -84,9 +84,11 @@ public class UserController {
      * возвращаем список пользователей, являющихся его друзьями
      * */
     @GetMapping("/{id}/friends")
-    public Collection<User> getFriends(@PathVariable @Positive Integer id) {
+    public Collection<UserResponseDto> getFriends(@PathVariable @Positive Integer id) {
         log.info("Получаем друзей пользователя id={}", id);
-        return userService.getFriends(id);
+        return userService.getFriends(id).stream()
+                .map(UserMapper::mapUserToUserResponseDto)
+                .toList();
     }
 
     /*
@@ -104,9 +106,11 @@ public class UserController {
      * список друзей, общих с другим пользователем
      * */
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Collection<User> getCommonFriends(@PathVariable @Positive Integer id,
+    public Collection<UserResponseDto> getCommonFriends(@PathVariable @Positive Integer id,
                                  @PathVariable @Positive Integer otherId) {
         log.info("Общие друзья пользователей id={} и id={}", id, otherId);
-        return userService.getCommonFriends(id, otherId);
+        return userService.getCommonFriends(id, otherId).stream()
+                .map(UserMapper::mapUserToUserResponseDto)
+                .toList();
     }
 }
