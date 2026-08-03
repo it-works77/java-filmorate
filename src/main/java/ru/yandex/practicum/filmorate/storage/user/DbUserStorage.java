@@ -20,8 +20,8 @@ import static ru.yandex.practicum.filmorate.storage.user.DbUserStorageQueries.*;
 @Qualifier("dbUserStorage")
 public class DbUserStorage extends BaseDbStorage<User> implements UserStorage {
 
-    public DbUserStorage(JdbcTemplate jdbc, RowMapper<User> userMapper) {
-        super(jdbc, userMapper);
+    public DbUserStorage(JdbcTemplate jdbc, RowMapper<User> userRowMapper) {
+        super(jdbc, userRowMapper);
     }
 
     @Override

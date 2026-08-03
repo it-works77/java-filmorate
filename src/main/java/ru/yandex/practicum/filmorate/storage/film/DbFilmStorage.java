@@ -25,8 +25,8 @@ import static ru.yandex.practicum.filmorate.storage.film.DbFilmStorageQueries.*;
 @Qualifier("dbFilmStorage")
 public class DbFilmStorage extends BaseDbStorage<Film> implements FilmStorage {
 
-    public DbFilmStorage(JdbcTemplate jdbc, RowMapper<Film> filmMapper) {
-        super(jdbc, filmMapper);
+    public DbFilmStorage(JdbcTemplate jdbc, RowMapper<Film> filmRowMapper) {
+        super(jdbc, filmRowMapper);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class DbFilmStorage extends BaseDbStorage<Film> implements FilmStorage {
     }
 
     private Set<Genre> getFilmGenres(Integer id, Film film) {
-        List<FilmGenre> filmGenres = jdbc.query(FIND_FILM_GENRES_BY_ID_QUERY, new FilmGenreMapper(), id);
+        List<FilmGenre> filmGenres = jdbc.query(FIND_FILM_GENRES_BY_ID_QUERY, new FilmGenreRowMapper(), id);
         return filmGenres.stream()
                 .map(filmGenre -> Genre.valueOf(filmGenre.getGenre()))
                 .collect(Collectors.toSet());
