@@ -15,6 +15,8 @@ import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +39,7 @@ class DbFilmStorageTest {
                 .description("Desc")
                 .releaseDate(LocalDate.of(2000,1,1))
                 .duration(100)
-                .mpa(MpaRating.R)
+                .mpa(MpaRating.PG_13)
                 .build();
 
         film2 = Film.builder()
@@ -115,6 +117,12 @@ class DbFilmStorageTest {
         dbFilmStorage.add(film1);
         dbFilmStorage.add(film2);
         assertEquals(2, dbFilmStorage.getAll().size());
+    }
+
+    @Test
+    void getAll_whenDbIsEmpty() {
+        Collection<Film> films = dbFilmStorage.getAll();
+        assertEquals(0, films.size());
     }
 
     @Test
