@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.like;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,10 +10,9 @@ import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Repository
 @Qualifier("dbLikeStorage")
-public class DbLikeStorage extends BaseDbStorage<FilmLike> implements LikeStorage  {
+public class DbLikeStorage extends BaseDbStorage<FilmLike> implements LikeStorage {
 
     public DbLikeStorage(JdbcTemplate jdbc, RowMapper<FilmLike> mapper) {
         super(jdbc, mapper);

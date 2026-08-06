@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.friend;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import static ru.yandex.practicum.filmorate.storage.friend.DbFriendStorageQueries.*;
 
-@Slf4j
 @Repository
 @Qualifier("dbFriendStorage")
 public class DbFriendStorage extends BaseDbStorage<FriendLink> implements FriendStorage {
