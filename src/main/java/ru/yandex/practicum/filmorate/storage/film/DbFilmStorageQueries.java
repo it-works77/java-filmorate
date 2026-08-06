@@ -46,6 +46,10 @@ public final class DbFilmStorageQueries {
             FROM film_genres
             WHERE film_id = ?;""";
 
+    public static final String FIND_FILM_GENRES_WITH_FILM_ID_QUERY = """
+            SELECT film_id, genre
+            FROM film_genres;""";
+
     private DbFilmStorageQueries() {
     }
 }

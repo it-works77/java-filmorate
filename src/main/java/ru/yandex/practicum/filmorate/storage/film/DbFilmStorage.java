@@ -90,7 +90,20 @@ public class DbFilmStorage extends BaseDbStorage<Film> implements FilmStorage {
     @Override
     public Collection<Film> getAll() {
         List<Film> films = findMany(FIND_ALL_QUERY);
-        films.stream().forEach(film -> film.setGenres(getFilmGenres(film.getId(), film)));
+
+        List<FilmGenre> filmGenreList = jdbc.query(FIND_FILM_GENRES_WITH_FILM_ID_QUERY, new FilmGenreWithFilmIdRowMapper());
+        Map<Integer, Set<Genre>> filmGenreMap = filmGenreList.stream()
+                .collect(Collectors.groupingBy(
+                        FilmGenre::getFilmId,
+                        Collectors.mapping(
+                                filmGenre -> Genre.valueOf(filmGenre.getGenre()),
+                                Collectors.toSet()
+                        )
+                ));
+
+        films.forEach(film -> {
+            film.setGenres(filmGenreMap.getOrDefault(film.getId(), Collections.emptySet()));
+        });
         return films;
     }
 
