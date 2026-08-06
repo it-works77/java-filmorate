@@ -8,8 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.FilmRequestDto;
 import ru.yandex.practicum.filmorate.dto.FilmResponseDto;
-import ru.yandex.practicum.filmorate.mappers.FilmMapper;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -30,9 +28,9 @@ public class FilmController {
     @PostMapping
     public FilmResponseDto create(@Validated(Create.class)  @RequestBody FilmRequestDto filmRequestDto) {
         log.info("Create film: {}", filmRequestDto);
-        Film result = filmService.add(FilmMapper.mapFilmRequestDtoToFilm(filmRequestDto));
+        FilmResponseDto result = filmService.add(filmRequestDto);
         log.info("Film created: {}", result);
-        return FilmMapper.mapFilmToFilmResponseDto(result);
+        return result;
     }
 
     /*
@@ -41,9 +39,9 @@ public class FilmController {
     @PutMapping
     public FilmResponseDto update(@Validated(Update.class) @RequestBody FilmRequestDto filmRequestDto) {
         log.info("Update film: {}", filmRequestDto);
-        Film result = filmService.update(FilmMapper.mapFilmRequestDtoToFilm(filmRequestDto));
+        FilmResponseDto result = filmService.update(filmRequestDto);
         log.info("Film updated: {}", result);
-        return FilmMapper.mapFilmToFilmResponseDto(result);
+        return result;
     }
 
     /*
@@ -52,7 +50,7 @@ public class FilmController {
     @GetMapping("/{id}")
     public FilmResponseDto getFilm(@PathVariable @Positive Integer id) {
         log.info("Получаем фильм по id={}", id);
-        return FilmMapper.mapFilmToFilmResponseDto(filmService.get(id));
+        return filmService.get(id);
     }
 
     /*
@@ -61,9 +59,7 @@ public class FilmController {
     @GetMapping
     public Collection<FilmResponseDto> getAll() {
         log.info("Get all films");
-        return filmService.getAll().stream()
-                .map(FilmMapper::mapFilmToFilmResponseDto)
-                .toList();
+        return filmService.getAll();
     }
 
     /*
@@ -96,13 +92,9 @@ public class FilmController {
     public Collection<FilmResponseDto> addLike(@RequestParam(name = "count", required = false) @Positive Integer topByLikesFilmsNumber) {
         log.info("Возвращаем {} популярных фильмов", topByLikesFilmsNumber);
         if (topByLikesFilmsNumber == null) {
-            return filmService.getTopFilmsByLikes().stream()
-                    .map(FilmMapper::mapFilmToFilmResponseDto)
-                    .toList();
+            return filmService.getTopFilmsByLikes();
         } else {
-            return filmService.getTopFilmsByLikes(topByLikesFilmsNumber).stream()
-                    .map(FilmMapper::mapFilmToFilmResponseDto)
-                    .toList();
+            return filmService.getTopFilmsByLikes(topByLikesFilmsNumber);
         }
     }
 }

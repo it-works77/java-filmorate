@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.dto.GenreResponseDto;
-import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
@@ -25,15 +24,13 @@ public class GenreController {
     @GetMapping
     public Collection<GenreResponseDto> getMpaAll() {
         log.info("Get all genres ratings");
-        return filmService.getGenreAll().stream()
-                .map(FilmMapper::genreToGenreResponseDto)
-                .toList();
+        return filmService.getGenreAll();
     }
 
     @GetMapping("/{genreId}")
     public GenreResponseDto getMpa(@PathVariable @Positive Integer genreId) {
         log.info("Получаем жанр по id={}", genreId);
-        return FilmMapper.genreToGenreResponseDto(filmService.getGenre(genreId));
+        return filmService.getGenre(genreId);
     }
 
 }

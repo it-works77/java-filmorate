@@ -8,8 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.UserRequestDto;
 import ru.yandex.practicum.filmorate.dto.UserResponseDto;
-import ru.yandex.practicum.filmorate.mappers.UserMapper;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -33,9 +31,9 @@ public class UserController {
          * Также логируйте причины ошибок — например, если валидация не пройдена.
          * */
         log.info("Create user: {}", userRequestDto);
-        User user = userService.add(UserMapper.mapUserRequestDtoToUser(userRequestDto));
-        log.info("User created: {}", user);
-        return UserMapper.mapUserToUserResponseDto(user);
+        UserResponseDto userResponseDto = userService.add(userRequestDto);
+        log.info("User created: {}", userResponseDto);
+        return userResponseDto;
     }
 
     /*
@@ -44,9 +42,9 @@ public class UserController {
     @PutMapping
     public UserResponseDto update(@Validated(Update.class) @RequestBody UserRequestDto userRequestDto) {
         log.info("Update user: {}", userRequestDto);
-        User user = userService.update(UserMapper.mapUserRequestDtoToUser(userRequestDto));
-        log.info("User updated: {}", user);
-        return UserMapper.mapUserToUserResponseDto(user);
+        UserResponseDto userResponseDto = userService.update(userRequestDto);
+        log.info("User updated: {}", userResponseDto);
+        return userResponseDto;
     }
 
     /*
@@ -55,7 +53,7 @@ public class UserController {
     @GetMapping("/{id}")
     public UserResponseDto getUser(@PathVariable @Positive Integer id) {
         log.info("Получаем пользователя по id={}", id);
-        return UserMapper.mapUserToUserResponseDto(userService.get(id));
+        return userService.get(id);
     }
 
     /*
@@ -64,9 +62,7 @@ public class UserController {
     @GetMapping
     public Collection<UserResponseDto> getAll() {
         log.info("Get all users");
-        return userService.getAll().stream()
-                .map(UserMapper::mapUserToUserResponseDto)
-                .toList();
+        return userService.getAll();
     }
 
     /*
@@ -86,9 +82,7 @@ public class UserController {
     @GetMapping("/{id}/friends")
     public Collection<UserResponseDto> getFriends(@PathVariable @Positive Integer id) {
         log.info("Получаем друзей пользователя id={}", id);
-        return userService.getFriends(id).stream()
-                .map(UserMapper::mapUserToUserResponseDto)
-                .toList();
+        return userService.getFriends(id);
     }
 
     /*
@@ -109,8 +103,6 @@ public class UserController {
     public Collection<UserResponseDto> getCommonFriends(@PathVariable @Positive Integer id,
                                  @PathVariable @Positive Integer otherId) {
         log.info("Общие друзья пользователей id={} и id={}", id, otherId);
-        return userService.getCommonFriends(id, otherId).stream()
-                .map(UserMapper::mapUserToUserResponseDto)
-                .toList();
+        return userService.getCommonFriends(id, otherId);
     }
 }

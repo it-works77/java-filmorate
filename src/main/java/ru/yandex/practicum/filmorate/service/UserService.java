@@ -3,7 +3,10 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dto.UserRequestDto;
+import ru.yandex.practicum.filmorate.dto.UserResponseDto;
 import ru.yandex.practicum.filmorate.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.mappers.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.friend.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -24,28 +27,33 @@ public class UserService {
         this.friendStorage = friendStorage;
     }
 
-    public Collection<User> getAll() {
-        return userStorage.getAll();
-    }
-
-    public User add(User user) {
+    public UserResponseDto add(UserRequestDto userRequestDto) {
+        User user = UserMapper.mapUserRequestDtoToUser(userRequestDto);
         // ТЗ: имя для отображения может быть пустым — в таком случае будет использован логин
         if (user.getName() == null) {
             user.setName(user.getLogin());
         }
-        return userStorage.add(user);
+        return UserMapper.mapUserToUserResponseDto(userStorage.add(user));
     }
 
-    public User get(Integer userId) {
-        return userStorage.get(userId).orElseThrow(() ->
+    public UserResponseDto get(Integer userId) {
+        User user = userStorage.get(userId).orElseThrow(() ->
                 new EntityNotFoundException("Не найден пользователь с id=" + userId));
+        return UserMapper.mapUserToUserResponseDto(user);
     }
 
-    public User update(User newUser) {
+    public Collection<UserResponseDto> getAll() {
+        return userStorage.getAll().stream()
+                .map(UserMapper::mapUserToUserResponseDto)
+                .toList();
+    }
+
+    public UserResponseDto update(UserRequestDto userRequestDto) {
+        User newUser = UserMapper.mapUserRequestDtoToUser(userRequestDto);
         checkUserExistence(newUser.getId());
         User updatedUser = userStorage.update(newUser);
         log.info("Обновили пользователя {}", updatedUser);
-        return updatedUser;
+        return UserMapper.mapUserToUserResponseDto(updatedUser);
     }
 
     public void addFriend(Integer userId, Integer friendId) {
@@ -62,24 +70,28 @@ public class UserService {
         log.info("Пользователь {} удалил друга {}", userId, friendId);
     }
 
-    public Collection<User> getCommonFriends(Integer id, Integer otherId) {
+    public Collection<UserResponseDto> getCommonFriends(Integer id, Integer otherId) {
         Collection<Integer> commonFriendsIds = getCommonFriendIds(id, otherId);
         return commonFriendsIds.stream()
                 .map(userStorage::get)
                 .map(userOpt -> userOpt.orElseThrow(() ->
                         new IllegalStateException("Неконсистентное состояние friendStorage" +
                                 " и userStorage: не найден пользователь по Id")))
+                .map(UserMapper::mapUserToUserResponseDto)
                 .toList();
     }
 
-    public Collection<User> getFriends(Integer userId) {
+    public Collection<UserResponseDto> getFriends(Integer userId) {
         checkUserExistence(userId);
         List<Integer> friendIds = friendStorage.getFriends(userId);
-        return friendIds.stream()
+        List<User> friends = friendIds.stream()
                 .map(userStorage::get)
                 .map(userOpt -> userOpt.orElseThrow(() ->
                         new IllegalStateException("Неконсистентное состояние friendStorage" +
                                 " и userStorage: не найден пользователь по Id")))
+                .toList();
+        return friends.stream()
+                .map(UserMapper::mapUserToUserResponseDto)
                 .toList();
     }
 

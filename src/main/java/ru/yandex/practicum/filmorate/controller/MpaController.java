@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.dto.MpaResponseDto;
-import ru.yandex.practicum.filmorate.mappers.FilmMapper;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
@@ -25,14 +24,12 @@ public class MpaController {
     @GetMapping
     public Collection<MpaResponseDto> getMpaAll() {
         log.info("Get all MPA ratings");
-        return filmService.getMpaAll().stream()
-                .map(FilmMapper::mpaRatingToMpaResponseDto)
-                .toList();
+        return filmService.getMpaAll();
     }
 
     @GetMapping("/{mpaId}")
     public MpaResponseDto getMpa(@PathVariable @Positive Integer mpaId) {
         log.info("Получаем MPA по id={}", mpaId);
-        return FilmMapper.mpaRatingToMpaResponseDto(filmService.getMpa(mpaId));
+        return filmService.getMpa(mpaId);
     }
 }
