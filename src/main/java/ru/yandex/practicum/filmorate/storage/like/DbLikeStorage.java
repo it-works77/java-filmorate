@@ -20,7 +20,7 @@ public class DbLikeStorage extends BaseDbStorage<FilmLike> implements LikeStorag
 
     @Override
     public void addLike(Integer filmId, Integer userId) {
-        insert(DbLikeStorageQueries.INSERT_QUERY, filmId, userId);
+        insertWithCompositePrimaryKey(DbLikeStorageQueries.INSERT_QUERY, filmId, userId);
     }
 
     @Override
