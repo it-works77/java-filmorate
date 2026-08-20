@@ -14,5 +14,5 @@ public interface UserStorage {
 
     Collection<User> getAll();
 
-    Optional<User> remove(Integer id);
+    boolean remove(Integer id);
 }

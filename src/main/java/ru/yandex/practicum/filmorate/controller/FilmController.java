@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.dto.FilmRequestDto;
+import ru.yandex.practicum.filmorate.dto.FilmResponseDto;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -25,22 +26,21 @@ public class FilmController {
      * добавление фильма;
      * */
     @PostMapping
-    public Film create(@Validated(Create.class) @RequestBody Film film) {
-        log.info("Create film: {}", film);
-        Film result = filmService.add(film);
+    public FilmResponseDto create(@Validated(Create.class)  @RequestBody FilmRequestDto filmRequestDto) {
+        log.info("Create film: {}", filmRequestDto);
+        FilmResponseDto result = filmService.add(filmRequestDto);
         log.info("Film created: {}", result);
         return result;
-
     }
 
     /*
      * обновление фильма;
      * */
     @PutMapping
-    public Film update(@Validated(Update.class) @RequestBody Film newFilm) {
-        log.info("Update film: {}", newFilm);
-        Film result = filmService.update(newFilm);
-        log.info("Film updated: {}", newFilm);
+    public FilmResponseDto update(@Validated(Update.class) @RequestBody FilmRequestDto filmRequestDto) {
+        log.info("Update film: {}", filmRequestDto);
+        FilmResponseDto result = filmService.update(filmRequestDto);
+        log.info("Film updated: {}", result);
         return result;
     }
 
@@ -48,7 +48,7 @@ public class FilmController {
      * получение фильма по id
      */
     @GetMapping("/{id}")
-    public Film getFilm(@PathVariable @Positive Integer id) {
+    public FilmResponseDto getFilm(@PathVariable @Positive Integer id) {
         log.info("Получаем фильм по id={}", id);
         return filmService.get(id);
     }
@@ -57,7 +57,7 @@ public class FilmController {
      * получение всех фильмов.
      */
     @GetMapping
-    public Collection<Film> getAll() {
+    public Collection<FilmResponseDto> getAll() {
         log.info("Get all films");
         return filmService.getAll();
     }
@@ -89,7 +89,7 @@ public class FilmController {
      * Если значение параметра count не задано, верните первые 10
      * */
     @GetMapping("/popular")
-    public Collection<Film> addLike(@RequestParam(name = "count", required = false) @Positive Integer topByLikesFilmsNumber) {
+    public Collection<FilmResponseDto> addLike(@RequestParam(name = "count", required = false) @Positive Integer topByLikesFilmsNumber) {
         log.info("Возвращаем {} популярных фильмов", topByLikesFilmsNumber);
         if (topByLikesFilmsNumber == null) {
             return filmService.getTopFilmsByLikes();

@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.dto.UserRequestDto;
+import ru.yandex.practicum.filmorate.dto.UserResponseDto;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.Create;
 import ru.yandex.practicum.filmorate.validation.Update;
@@ -25,33 +26,32 @@ public class UserController {
      * создание пользователя;
      * */
     @PostMapping
-    public User create(@Validated(Create.class) @RequestBody User user) {
+    public UserResponseDto create(@Validated(Create.class) @RequestBody UserRequestDto userRequestDto) {
         /* Добавьте логирование для операций, которые изменяют сущности — добавляют и обновляют их.
          * Также логируйте причины ошибок — например, если валидация не пройдена.
          * */
-        log.info("Create user: {}", user);
-        User result = userService.add(user);
-        log.info("User created: {}", result);
-        return result;
+        log.info("Create user: {}", userRequestDto);
+        UserResponseDto userResponseDto = userService.add(userRequestDto);
+        log.info("User created: {}", userResponseDto);
+        return userResponseDto;
     }
 
     /*
      * обновление пользователя;
      * */
     @PutMapping
-    public User update(@Validated(Update.class) @RequestBody User newUser) {
-        log.info("Update user: {}", newUser);
-
-        User result = userService.update(newUser);
-        log.info("User updated: {}", newUser);
-        return result;
+    public UserResponseDto update(@Validated(Update.class) @RequestBody UserRequestDto userRequestDto) {
+        log.info("Update user: {}", userRequestDto);
+        UserResponseDto userResponseDto = userService.update(userRequestDto);
+        log.info("User updated: {}", userResponseDto);
+        return userResponseDto;
     }
 
     /*
      * получение пользователя по id
      */
     @GetMapping("/{id}")
-    public User getUser(@PathVariable @Positive Integer id) {
+    public UserResponseDto getUser(@PathVariable @Positive Integer id) {
         log.info("Получаем пользователя по id={}", id);
         return userService.get(id);
     }
@@ -60,7 +60,7 @@ public class UserController {
      * получение списка всех пользователей.
      */
     @GetMapping
-    public Collection<User> getAll() {
+    public Collection<UserResponseDto> getAll() {
         log.info("Get all users");
         return userService.getAll();
     }
@@ -80,7 +80,7 @@ public class UserController {
      * возвращаем список пользователей, являющихся его друзьями
      * */
     @GetMapping("/{id}/friends")
-    public Collection<User> getFriends(@PathVariable @Positive Integer id) {
+    public Collection<UserResponseDto> getFriends(@PathVariable @Positive Integer id) {
         log.info("Получаем друзей пользователя id={}", id);
         return userService.getFriends(id);
     }
@@ -100,7 +100,7 @@ public class UserController {
      * список друзей, общих с другим пользователем
      * */
     @GetMapping("/{id}/friends/common/{otherId}")
-    public Collection<User> getCommonFriends(@PathVariable @Positive Integer id,
+    public Collection<UserResponseDto> getCommonFriends(@PathVariable @Positive Integer id,
                                  @PathVariable @Positive Integer otherId) {
         log.info("Общие друзья пользователей id={} и id={}", id, otherId);
         return userService.getCommonFriends(id, otherId);

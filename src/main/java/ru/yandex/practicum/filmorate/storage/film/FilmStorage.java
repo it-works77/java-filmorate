@@ -14,5 +14,5 @@ public interface FilmStorage {
 
     Collection<Film> getAll();
 
-    Optional<Film> remove(Integer id);
+    boolean remove(Integer id);
 }
